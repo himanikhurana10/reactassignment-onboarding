@@ -11,14 +11,19 @@ class TodoList extends Component {
        
         this.addItem = this.addItem.bind(this);
         this.deleteItem = this.deleteItem.bind(this);
+        this.markItemCompleted = this.markItemCompleted.bind(this);
+
       }
-      addItem(e) {
+    addItem(e) {
         if (this._inputElement.value !== "") {
           var newItem = {
             text: this._inputElement.value,
-            key: Date.now()
+            key: Date.now(),
+            tag : String,
+            done : false 
           };
-          console.log("VAUE IS", this._inputElement.value)
+    
+    //console.log("VAUE IS", this._inputElement.value)
        
           this.setState((prevState) => {
             return { 
@@ -33,6 +38,18 @@ class TodoList extends Component {
            
         e.preventDefault();
       }
+      markItemCompleted(key) {
+          console.log("CLICKED ON ", key);
+        var updatedItems = this.state.items.map(item => {
+         if (key === item.key)
+           item.done = !item.done;
+         return item;
+        });
+     
+        this.setState({
+         items: [].concat(updatedItems)
+         });
+      }
       deleteItem(key) {
         var filteredItems = this.state.items.filter(function (item) {
           return (item.key !== key);
@@ -42,6 +59,7 @@ class TodoList extends Component {
           items: filteredItems
         });
       }
+
       render() {
         return (
           <div className="todoListMain">
@@ -54,7 +72,7 @@ class TodoList extends Component {
               </form>
             </div>
             <ToDoItems entries={this.state.items}
-                      delete={this.deleteItem}/>
+                      delete={this.deleteItem}  onItemCompleted={this.markItemCompleted}/>
           </div>
         );
       }
