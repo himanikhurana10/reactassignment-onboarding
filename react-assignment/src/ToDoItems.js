@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 const ENTER_KEY = 13;
 const COMMA_KEY = 188; 
+const BACKSPACE_KEY= 8;
 var listItems
 
 class TodoItems extends Component {
@@ -9,8 +10,54 @@ class TodoItems extends Component {
         this.state = { tags: ["work", "personal", "family"], value: "" };
 
         this.createTasks = this.createTasks.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleKeyUp = this.handleKeyUp.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
+  }
+  handleChange(e) {
+    this.setState({
+      value: e.target.value
+    });
   }
 
+  handleKeyUp(e) {
+    const key = e.keyCode;
+
+    if (key === ENTER_KEY || key === COMMA_KEY) {
+      this.addTag();
+    }
+  }
+
+  handleKeyDown(e) {
+    const key = e.keyCode;
+    if (key === BACKSPACE_KEY && !this.state.value) {
+      this.editPrevTag();
+    }
+  }
+
+  addTag() {
+    const { tags, value } = this.state;
+    let tag = value.trim();
+
+    tag = tag.replace(/,/g, "");
+
+    if (!tag) {
+      return;
+    }
+
+    this.setState({
+      tags: [...tags, tag],
+      value: ""
+    });
+  }
+
+  editPrevTag() {
+    let { tags } = this.state;
+
+    const tag = tags.pop();
+
+    this.setState({ tags, value: tag });
+  }
   strike(strike, data) {
       if (strike) {
           return (
@@ -48,76 +95,32 @@ class TodoItems extends Component {
 //         return item.key === key;}).tag.Family= true)
 // }
 
-
-
-addTag() {
-    const { tags, value } = this.state;
-    let tag = value.trim();
-
-    tag = tag.replace(/,/g, "");
-
-    if (!tag) {
-      return;
-    }
-
-    this.setState({
-      tags: [...tags, tag],
-      value: ""
-    });
-  } 
-  handleKeyUp(e) {
-    const key = e.keyCode;
-
-    if (key === ENTER_KEY || key === COMMA_KEY) {
-      this.addTag();
-    }
-  }
  
 createTasks(item) {
         const { tags, value } = this.state;
         return  (
-        
         <div>
-        <input type ="checkbox"  onClick={() =>
-        //  setTimeout((listItem) => {
-        //     this.delete(item.key)  
-        //   }, 800, this._listItem)
-        //  this.strikes()
-            this.strikeItem(item.key)
-         }    
-                 key={item.key}/>
-                    {this.strike(item.done, item.text)}
-                    <ul>
+        <input type ="checkbox"  onClick={() =>this.strikeItem(item.key)}key={item.key}/>
+            {this.strike(item.done, item.text)}
+        <ul>
             {tags.map((tag, i) => (
               <li key={tag + i} className="tag">
-                {tag}
+                   {tag}
               </li>
             ))}
-          </ul>
-          <input
+        </ul>
+        <input
             type="text"
             placeholder="
                          
                          tag..."
             value={value}
+            onChange={this.handleChange}
             ref="tag"
             onKeyUp={this.handleKeyUp}
+            onKeyDown={this.handleKeyDown}
           />
-                    {/* <ul>
-                        <li type="none"/>
-                          <input type="text" placeholder="add tag" value ={}/>
-                        {/* <input type="text" onClick={() => 
-                            this.addworktag(item.key)} />
-                            Work
-                        <input type="checkbox" onClick={() => 
-                            this.addpersonaltag(item.key)} />
-                            Personal
-                        <input type="checkbox" onClick={() => 
-                            this.addfamilytag(item.key)} />
-                            Family   */}
-                 
-             
-                    </div>           
+        </div>           
         )
       }
     
