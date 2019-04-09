@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import './ToDoItems.css' 
 const ENTER_KEY = 13;
 const COMMA_KEY = 188; 
 const BACKSPACE_KEY= 8;
@@ -76,35 +77,21 @@ class TodoItems extends Component {
   strikeItem(key) {
     console.log("CLICK IN CHILD", key)
       this.props.onItemCompleted(key);
-  } 
-//   addworktag(id){
-
-//        listItems.find((item) => {
-//         return item.key === id;}).tag.Work= true
-// }
-// addpersonaltag(id){
-
-//     listItems.find((item) => {
-//      return item.key === id;}).tag.Personal= true
-// }
-// addfamilytag(key){
-
-//     // listItems.find((item) => {
-//     //  return item.key === key;}).tag.Family= true
-//     console.log(listItems.find((item) => {
-//         return item.key === key;}).tag.Family= true)
-// }
+  }
 
  
 createTasks(item) {
         const { tags, value } = this.state;
         return  (
         <div>
-        <input type ="checkbox"  onClick={() =>this.strikeItem(item.key)}key={item.key}/>
-            {this.strike(item.done, item.text)}
+        <h1 className="list">
+        <input type ="checkbox" className="list"  onClick={() =>this.strikeItem(item.key)}key={item.key}/>
+        <i>{this.strike(item.done, item.text) }</i>
+        </h1>
+    
         <ul>
             {tags.map((tag, i) => (
-              <li key={tag + i} className="tag">
+              <li key={tag + i}  onClick={() =>this.delete(item.key)} className="tag">
                    {tag}
               </li>
             ))}
@@ -117,6 +104,7 @@ createTasks(item) {
             value={value}
             onChange={this.handleChange}
             ref="tag"
+            className="tags"
             onKeyUp={this.handleKeyUp}
             onKeyDown={this.handleKeyDown}
           />

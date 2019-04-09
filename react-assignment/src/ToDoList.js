@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ToDoItems from './ToDoItems';
+import './ToDoLIst.css'
  
 class TodoList extends Component {
     constructor(props) {
@@ -19,7 +20,7 @@ class TodoList extends Component {
           var newItem = {
             text: this._inputElement.value,
             key: Date.now(),
-            tag : String,
+            tag : {Work : false, Personal: false, Family: false },
             done : false 
           };
     
@@ -71,8 +72,10 @@ class TodoList extends Component {
                 <button type="submit">add</button>
               </form>
             </div>
+            <div className="lisitem">
             <ToDoItems entries={this.state.items}
-                      delete={this.deleteItem}  onItemCompleted={this.markItemCompleted}/>
+                      delete={this.deleteItem}  onItemCompleted={this.markItemCompleted} onAddingTags={this.addtags}/>
+           </div>
           </div>
         );
       }
